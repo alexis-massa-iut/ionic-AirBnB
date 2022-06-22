@@ -7,7 +7,6 @@ npm i --force
 ionic integrations enable cordova --add
 ionic cordova platform add android@9
 npm i -D typescript@3.8.* --force
-ionic serve
 ```
 
 # Start project
