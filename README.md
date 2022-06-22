@@ -10,6 +10,12 @@ npm i -D typescript@3.8.* --force
 ```
 
 # Start project
+
+## Browser
 ```bash
 ionic serve
+```
+## Android
+```bash
+ionic cordova run android
 ```
