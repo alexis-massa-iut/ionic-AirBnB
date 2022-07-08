@@ -16,7 +16,7 @@ export class BookingsPage implements OnInit {
     private alertController: AlertController
   ) { }
 
-  ngOnInit() { this.myBookings = this.bookingsService.myBookings; }
+  ngOnInit() { this.myBookings = this.bookingsService.getMyBookings(); }
 
   /**
    * Delete booking
@@ -31,7 +31,7 @@ export class BookingsPage implements OnInit {
         {
           text: 'Supprimer', handler: () => {
             this.bookingsService.deleteBooking(booking);
-            this.myBookings = this.bookingsService.myBookings;
+            this.myBookings = this.bookingsService.getMyBookings();
           }
         }
       ]

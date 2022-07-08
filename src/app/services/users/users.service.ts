@@ -22,10 +22,7 @@ export class UsersService {
    */
   getUserById(id: string): User {
     const allUsers = this.getAllUsers()
-    if (allUsers)
-      return allUsers.find(user => user.id === id);
-    else
-      return null;
+    return allUsers ? allUsers.find(user => user.id === id) : null;
   }
 
 

@@ -8,13 +8,24 @@ import { AuthService } from '../auth/auth.service';
   providedIn: 'root'
 })
 export class BookingsService {
-  
-  private _bookings: Booking[];
 
   constructor(private toastController: ToastController, private authService: AuthService) { }
 
-  get otherBookings() {
-    return this._bookings ? [...this._bookings.filter(b => b.userId !== this.authService.userAuthenticated)] : [];
+  /**
+   * Get all bookings
+   * @returns All bookings
+   */
+  getAllBookings(): Booking[] {
+    return JSON.parse(localStorage.getItem('bookings'));
+  }
+
+  /**
+   * Get booking by id
+   * @param id Id of booking to get
+   */
+  getBookingById(id: string): Booking {
+    const allBookings = this.getAllBookings();
+    return allBookings ? allBookings.find(b => b.id === id) : null;
   }
 
 
@@ -23,16 +34,17 @@ export class BookingsService {
    * @param id Id of booking to get
    * @returns Booking with place id
    */
-  getPlace(id: string) {
-    return { ...this._bookings.find(b => b.placeId === id) };
+  getPlace(id: string): Booking[] {
+    return JSON.parse(localStorage.getItem('bookings')).filter(b => b.placeId === id);
   }
 
   /**
    * Get bookings of current user
    * @returns Booking[] of current user
    */
-  get myBookings() {
-    return this._bookings ? [...this._bookings.filter(b => b.userId === this.authService.userAuthenticated)] : [];
+  getMyBookings(): Booking[] {
+    const allBookings = this.getAllBookings();
+    return allBookings ? allBookings.filter(b => b.userId === this.authService.userAuthenticated) : [];
   }
 
   /**
@@ -45,17 +57,25 @@ export class BookingsService {
     do {
       id = (Math.floor(Math.random() * 1000)).toString()
       booking.id = id;
-    } while (this._bookings && this._bookings.find(b => b.id === id));
+    } while (this.getBookingById(booking.id));
 
-    if (this._bookings)
-      this._bookings.push(booking);
-    else
-      this._bookings = [booking];
+    if (!this.getBookingById(booking.id)) { // If booking doesn't exist already
+      let bookings = this.getAllBookings();
+      if (bookings) bookings.push(booking);
+      else bookings = [booking];
+      localStorage.setItem('bookings', JSON.stringify(bookings));
+      this.toastController.create({
+        message: 'Booking created',
+        duration: 2000
+      }).then(toast => toast.present());
+    } else {
+      this.toastController.create({
+        message: 'This booking already exists',
+        duration: 2000
+      }).then(toast => toast.present());
+    }
 
-    this.toastController.create({
-      message: 'Booking created',
-      duration: 2000
-    }).then(toast => toast.present());
+
   }
 
   /**
@@ -63,7 +83,15 @@ export class BookingsService {
    * @param booking Booking to delete 
    */
   deleteBooking(booking: Booking) {
-    this._bookings = this._bookings ? this._bookings.filter(b => b.id !== booking.id) : [];
+    let bookings = this.getAllBookings();
+    if (bookings) {
+      bookings = bookings.filter(b => b.id !== booking.id);
+      localStorage.setItem('bookings', JSON.stringify(bookings));
+      this.toastController.create({
+        message: 'Booking deleted',
+        duration: 2000
+      }).then(toast => toast.present());
+    }
   }
 
 }
