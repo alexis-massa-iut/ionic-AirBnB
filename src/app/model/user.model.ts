@@ -5,15 +5,4 @@ export class User {
         public password: string
     ) { }
 
-    /**
-     * Get username
-     * @returns {string}
-     */
-    getUsername(): string { return this.username; }
-
-    /**
-     * Get password
-     * @returns {string}
-     */
-    getPassword(): string { return this.password; }
 }
