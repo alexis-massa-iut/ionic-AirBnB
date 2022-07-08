@@ -5,7 +5,87 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-button color="primary" (click)="onLogin()">
-    Connexion
-  </ion-button>
+  <h1>Connexion</h1>
+  <form (ngSubmit)="onSubmit(this.formAuth)" [formGroup]="formAuth">
+    <ion-row>
+      <ion-col sizeSm="4" offsetSm="3">
+        <ion-list>
+
+          <ion-item>
+            <ion-label position="floating">Username (min 3 car.)</ion-label>
+            <ion-input type="text" name="username" autocomplete autocorrect formControlName="username"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Mot de Passe (min 8 car.)</ion-label>
+            <ion-input id="password" type="password" name="password" autocomplete autocorrect
+              formControlName="password"></ion-input>
+            <ion-button slot="end" fill="clear" (click)="toggleShow()">
+              <ion-icon [hidden]="showPassword" name="eye-outline"></ion-icon>
+              <ion-icon [hidden]="!showPassword" name="eye-off-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col sizeSm="3" offsetSm="4">
+        <ion-button color="primary" type="submit" (click)="onLogin()">
+          Connexion
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+
+
+  <h1>Créer un User</h1>
+  <form (ngSubmit)="onCreateUser()" [formGroup]="formUser">
+    <ion-row>
+      <ion-col sizeSm="4" offsetSm="3">
+        <ion-item>
+          <ion-label position="floating">Username (min 3 car.)</ion-label>
+          <ion-input type="text" name="username" autocomplete autocorrect formControlName="username"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Mot de Passe (min 8 car.)</ion-label>
+          <ion-input id="password" type="password" name="password" autocomplete autocorrect formControlName="password">
+          </ion-input>
+          <ion-button slot="end" fill="clear" (click)="toggleShow()">
+            <ion-icon [hidden]="showPassword" name="eye-outline"></ion-icon>
+            <ion-icon [hidden]="!showPassword" name="eye-off-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col sizeSm="3" offsetSm="4">
+        <ion-button color="primary" type="submit">Créer User</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <h1>Liste des Users</h1>
+  <p>Les mots de passe sont en clair pour indication, en réalité il ne faudrait pas les mettre ici, ni afficher la liste des utilisateurs :)</p>
+  <ion-grid>
+    <ion-row>
+      <ion-col>ID</ion-col>
+      <ion-col>Username</ion-col>
+      <ion-col>Password</ion-col>
+      <ion-col>Action</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let user of users">
+      <ion-col>{{user.id}}</ion-col>
+      <ion-col>{{user.username}}</ion-col>
+      <ion-col>{{user.password}}</ion-col>
+      <ion-col>
+        <ion-item-option color="danger" (click)="onDeleteUser(user)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
