@@ -9,12 +9,17 @@ import { UsersService } from '../users/users.service';
 })
 export class AuthService {
   private _userIsAuthenticated = false;
-  private _userAuthenticated: string; // Id of connected user (used for bookings)
+  private _userAuthenticated = ""; // Id of connected user (used for bookings)
+
+  constructor(private usersService: UsersService) { }
 
   get userIsAuthenticated() {
     return this._userIsAuthenticated;
   }
-  constructor(private usersService: UsersService) { }
+
+  get userAuthenticated() {
+    return this._userAuthenticated;
+  }
 
   login(username: string, password: string) {
     if (this.usersService.getUserByUsername(username) && this.usersService.getUserByUsername(username).password === password) {
@@ -25,6 +30,6 @@ export class AuthService {
 
   logout() {
     this._userIsAuthenticated = false;
-    this._userAuthenticated = null;
+    this._userAuthenticated = "";
   }
 }

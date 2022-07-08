@@ -11,5 +11,27 @@
 
 <ion-content class="ion-text-center" padding>
   <p>{{ selectedPlace.description }}</p>
-  <ion-button color="primary" (click)="onBookPlace()">Réserver</ion-button>
+  <form [formGroup]="formBooking">
+    <ion-row>
+      <ion-col sizeSm="4" offsetSm="3">
+
+        <ion-item>
+          <ion-label position="floating">Nombre de guests</ion-label>
+          <ion-input formControlName="guestNumber"  name="guestNumber" type="number"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Date d'arrivée</ion-label>
+          <ion-datetime formControlName="startDate"  displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" name="startDate" [min]="minStartDate()"></ion-datetime>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Date de départ</ion-label>
+          <ion-datetime formControlName="endDate" displayFormat="D MMM, YY" pickerFormat="DD MMM YYYY" name="endDate" [min]="minEndDate()"></ion-datetime>
+        </ion-item>
+
+      </ion-col>
+    </ion-row>
+  </form>
+  <ion-button color="primary" type="submit" (click)="onCreateBooking()">Réserver</ion-button>
 </ion-content>

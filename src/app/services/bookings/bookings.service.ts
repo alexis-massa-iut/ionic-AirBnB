@@ -1,33 +1,69 @@
 import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Booking } from 'src/app/model/booking.model';
+import { AuthService } from '../auth/auth.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingsService {
+  
+  private _bookings: Booking[];
 
-  private _bookings: Booking[] = [
-    new Booking('b1', 'p1', 'John', 'Doe', 5, new Date('2022-07-07'), new Date('2022-08-02'), false),
-    new Booking('b2', 'p2', 'Harry', 'Potter', 3, new Date('2022-07-12'), new Date('2022-07-16'), false),
-    new Booking('b3', 'p3', 'Philippe', 'Martin', 2, new Date('2022-07-17'), new Date('2022-07-18'), true),
-    new Booking('b4', 'p4', 'Nathan', 'Maxwell', 1, new Date('2022-07-24'), new Date('2022-07-29'), false),
-    new Booking('b5', 'p2', 'Hervé', 'Blanchon', 4, new Date('2022-08-29'), new Date('2022-08-31'), false),
-    new Booking('b6', 'p5', 'Philippe', 'Martin', 2, new Date('2022-08-30'), new Date('2022-09-05'), true)
-  ];
+  constructor(private toastController: ToastController, private authService: AuthService) { }
 
   get otherBookings() {
-    return [...this._bookings.filter(b => !b.personal)];
+    return this._bookings ? [...this._bookings.filter(b => b.userId !== this.authService.userAuthenticated)] : [];
   }
 
-  constructor() { }
 
+  /**
+   * Get bookings of place
+   * @param id Id of booking to get
+   * @returns Booking with place id
+   */
   getPlace(id: string) {
-    return { ...this._bookings.find(b => b.id === id) };
+    return { ...this._bookings.find(b => b.placeId === id) };
   }
 
+  /**
+   * Get bookings of current user
+   * @returns Booking[] of current user
+   */
   get myBookings() {
-    return [...this._bookings.filter(b => b.personal)];
+    return this._bookings ? [...this._bookings.filter(b => b.userId === this.authService.userAuthenticated)] : [];
   }
 
+  /**
+   * Add booking
+   * @param booking Booking to add
+   */
+  addBooking(booking: Booking) {
+    let id = (1).toString();
+
+    do {
+      id = (Math.floor(Math.random() * 1000)).toString()
+      booking.id = id;
+    } while (this._bookings && this._bookings.find(b => b.id === id));
+
+    if (this._bookings)
+      this._bookings.push(booking);
+    else
+      this._bookings = [booking];
+
+    this.toastController.create({
+      message: 'Booking created',
+      duration: 2000
+    }).then(toast => toast.present());
+  }
+
+  /**
+   * Delete booking
+   * @param booking Booking to delete 
+   */
+  deleteBooking(booking: Booking) {
+    this._bookings = this._bookings ? this._bookings.filter(b => b.id !== booking.id) : [];
+  }
 
 }

@@ -8,5 +8,26 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
+  <ion-grid>
+    <ion-row>
+      <ion-col>Lieu</ion-col>
+      <ion-col>userId</ion-col>
+      <ion-col>Nombre de guests</ion-col>
+      <ion-col>Départ</ion-col>
+      <ion-col>endDate</ion-col>
+      <ion-col>Actions</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let booking of myBookings">
+      <ion-col>{{booking.placeId}}</ion-col>
+      <ion-col>{{booking.userId}}</ion-col>
+      <ion-col>{{booking.guestNumber}}</ion-col>
+      <ion-col>{{booking.startDate}}</ion-col>
+      <ion-col>{{booking.endDate}}</ion-col>
+      <ion-col>
+        <ion-item-option color="danger" (click)="onDeleteBooking(booking)">
+          <ion-icon name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
