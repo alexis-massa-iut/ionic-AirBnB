@@ -5,7 +5,7 @@ import { Booking } from 'src/app/model/booking.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { BookingsService } from 'src/app/services/bookings/bookings.service';
 
-import { Place } from '../../places/place.model';
+import { Place } from 'src/app/model/place.model';
 
 @Component({
   selector: 'app-create-booking',
@@ -32,6 +32,9 @@ export class CreateBookingComponent implements OnInit {
     });
   }
 
+  /**
+   * Create a booking
+   */
   onCreateBooking() {
     if (!this.formBooking.valid) { return; }
 

@@ -34,7 +34,7 @@ export class BookingsService {
    * @param id Id of booking to get
    * @returns Booking with place id
    */
-  getPlace(id: string): Booking[] {
+  getBookingsOfPlace(id: string): Booking[] {
     return JSON.parse(localStorage.getItem('bookings')).filter(b => b.placeId === id);
   }
 
@@ -52,30 +52,19 @@ export class BookingsService {
    * @param booking Booking to add
    */
   addBooking(booking: Booking) {
-    let id = (1).toString();
-
     do {
-      id = (Math.floor(Math.random() * 1000)).toString()
-      booking.id = id;
+      booking.id = (Math.floor(Math.random() * 1000)).toString()
     } while (this.getBookingById(booking.id));
 
-    if (!this.getBookingById(booking.id)) { // If booking doesn't exist already
-      let bookings = this.getAllBookings();
-      if (bookings) bookings.push(booking);
-      else bookings = [booking];
-      localStorage.setItem('bookings', JSON.stringify(bookings));
-      this.toastController.create({
-        message: 'Booking created',
-        duration: 2000
-      }).then(toast => toast.present());
-    } else {
-      this.toastController.create({
-        message: 'This booking already exists',
-        duration: 2000
-      }).then(toast => toast.present());
-    }
-
-
+    let bookings = this.getAllBookings();
+    if (bookings) bookings.push(booking);
+    else bookings = [booking];
+    
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+    this.toastController.create({
+      message: 'Booking created',
+      duration: 2000
+    }).then(toast => toast.present());
   }
 
   /**

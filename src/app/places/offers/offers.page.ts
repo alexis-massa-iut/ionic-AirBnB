@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { PlacesService } from '../places.service';
-import { Place } from '../place.model';
+import { PlacesService } from '../../services/places/places.service';
+import { Place } from 'src/app/model/place.model';
 
 @Component({
   selector: 'app-offers',
@@ -14,7 +14,11 @@ export class OffersPage implements OnInit {
   constructor(private placesService: PlacesService) { }
 
   ngOnInit() {
-    this.offers = this.placesService.myPlaces;
+    this.offers = this.placesService.getMyPlaces();
+  }
+
+  ionViewWillEnter() {
+    this.offers = this.placesService.getMyPlaces();
   }
 
 }

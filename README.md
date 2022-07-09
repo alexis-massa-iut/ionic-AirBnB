@@ -9,6 +9,12 @@ ionic cordova platform add android@9
 npm i -D typescript@3.8.* --force
 ```
 
+## Camera plugin
+```bash
+ionic cordova plugin add cordova-plugin-camera 
+npm install @ionic-native/camera
+```
+
 # Start project
 
 ## Browser

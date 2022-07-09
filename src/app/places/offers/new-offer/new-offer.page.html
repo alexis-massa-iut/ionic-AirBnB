@@ -7,4 +7,61 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding"> </ion-content>
+<ion-content class="ion-padding">
+  <form [formGroup]="formOffer">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="4">
+          <ion-item>
+            <ion-label position="floating">Titre (min 5, max 50)</ion-label>
+            <ion-input type="text" autocomplete autocorrect formControlName="title"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="4">
+          <ion-item>
+            <ion-label position="floating">Description(min 5, max 255)</ion-label>
+            <ion-input type="text" autocomplete autocorrect formControlName="description"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="4">
+          <ion-item>
+            <ion-label position="floating">Image</ion-label>
+            <ion-button color="primary" (click)="onAddPicture('library')" full>
+              <ion-icon name="image" slot="icon-only"></ion-icon>
+              Choisir dans la bibliothèque
+            </ion-button>
+
+            <ion-button color="primary" (click)="onAddPicture('camera')" full>
+              <ion-icon name="camera" slot="icon-only"></ion-icon>
+              Prendre une photo
+            </ion-button>
+
+            <ion-img [src]="image"></ion-img>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="4">
+          <ion-item>
+            <ion-label position="floating">Prix (00.00)</ion-label>
+            <ion-input type="number" autocomplete autocorrect formControlName="price" step=".01">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size-sm="2" offset-sm="5">
+          <ion-button color="primary" type="submit" (click)="onCreateOffer()">Submit
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

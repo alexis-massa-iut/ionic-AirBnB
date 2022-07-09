@@ -1,66 +1,121 @@
 import { Injectable } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 
 import { Place } from '../../model/place.model';
+import { AuthService } from '../auth/auth.service';
+import { PhotoService } from '../photo/photo.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlacesService {
-    private _places: Place[] = [
-        new Place(
-            'p1',
-            'Chalet Cartusien',
-            'The place to be.',
-            'https://a0.muscache.com/im/pictures/miso/Hosting-23976121/original/0832bc7e-8c9f-45a5-ba50-d82db5dbf2e9.jpeg?im_w=720',
-            219.99,
-            true
-        ),
-        new Place(
-            'p2',
-            'Pension Manhattan',
-            'Au coeur de New York.',
-            'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
-            149.99,
-            false
-        ),
-        new Place(
-            'p3',
-            'L\'Amour Toujours',
-            'Endroit romantique à Paris.',
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Paris_Night.jpg/1024px-Paris_Night.jpg',
-            189.99,
-            true
-        ),
-        new Place(
-            'p4',
-            'Palace des Brumes',
-            'Le fog de San Francisco.',
-            'https://upload.wikimedia.org/wikipedia/commons/0/01/San_Francisco_with_two_bridges_and_the_fog.jpg',
-            99.99,
-            false
-        ),
-        new Place(
-            'p5',
-            'Datcha Moscovite',
-            'A 2 pas de la place rouge.',
-            'http://linguarik.com/wp-content/uploads/2019/10/1-datcha-bf0a0-f8c7a.jpg',
-            119.99,
-            false
-        )
-    ];
 
-    get otherPlaces() {
-        return [...this._places.filter(p => !p.personal)];
+    constructor(private photoService: PhotoService,
+        private authService: AuthService,
+        private toastController: ToastController
+    ) { }
+
+    /**
+     * Get all places
+     * @returns Place[]
+     */
+    getAllPlaces(): Place[] {
+        return JSON.parse(localStorage.getItem('places'));
     }
 
-    constructor() {
+    /**
+     * Get place by id
+     * @param id Id of place to get
+     * @returns Place
+     */
+    getPlaceById(id: string): Place {
+        return localStorage.getItem('places') ? this.getAllPlaces().find(p => p.id === id) : null;
     }
 
-    getPlace(id: string) {
-        return { ...this._places.find(p => p.id === id) };
+    /**
+     * Get place by title
+     * @param title title of place to get
+     */
+    getPlaceByTitle(title: string): Place {
+        return localStorage.getItem('places') ? this.getAllPlaces().find(p => p.title === title) : null;
     }
 
-    get myPlaces() {
-        return [...this._places.filter(p => p.personal)];
+    /**
+     * Get my places
+     * @returns Place[] of current user
+     */
+    getMyPlaces(): Place[] {
+        const allPlaces = this.getAllPlaces();
+        return allPlaces ? allPlaces.filter(b => b.userId === this.authService.userAuthenticated) : [];
+    }
+
+    /**
+     * Add place
+     * @param place Place to add
+     */
+    addPlace(place: Place) {
+
+        if (this.getPlaceByTitle(place.title)) {
+            this.toastController.create({
+                message: 'Place with the same title already exists',
+                duration: 3000
+            }).then(toast => toast.present());
+            return;
+        }
+
+        do {
+            place.id = (Math.floor(Math.random() * 1000)).toString()
+        } while (this.getPlaceById(place.id));
+
+        // If place doesn't exist already
+        let allPlaces = this.getAllPlaces();
+        if (allPlaces) allPlaces.push(place);
+        else allPlaces = [place];
+
+        localStorage.setItem('places', JSON.stringify(allPlaces));
+        this.toastController.create({
+            message: 'Place created',
+            duration: 2000
+        }).then(toast => toast.present());
+
+    }
+
+    /**
+     * Update place
+     * @param place Place to update
+     * @returns Place
+     */
+    updatePlace(place: Place) {
+        const allPlaces = this.getAllPlaces();
+        const index = allPlaces.findIndex(p => p.id === place.id);
+        if (index !== -1) {
+            allPlaces[index] = place;
+            localStorage.setItem('places', JSON.stringify(allPlaces));
+            this.toastController.create({
+                message: 'Place updated',
+                duration: 2000
+            }).then(toast => toast.present());
+        } else {
+            this.toastController.create({
+                message: 'Place not found',
+                duration: 2000
+            }).then(toast => toast.present());
+        }
+    }
+
+    /**
+     * Delete place
+     * @param place Place to delete
+     */
+    deletePlace(place: Place) {
+        let places = this.getAllPlaces();
+        if (places) {
+            places = places.filter(p => p.id !== place.id);
+            localStorage.setItem('places', JSON.stringify(places));
+            this.toastController.create({
+                message: 'Place deleted',
+                duration: 2000
+            }).then(toast => toast.present());
+        }
     }
 }

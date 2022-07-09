@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, ModalController } from '@ionic/angular';
 
-import { PlacesService } from '../../places.service';
-import { Place } from '../../place.model';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
+import { PlacesService } from 'src/app/services/places/places.service';
+import { Place } from 'src/app/model/place.model';
 
 @Component({
   selector: 'app-place-detail',
@@ -27,7 +27,7 @@ export class PlaceDetailPage implements OnInit {
         this.navCtrl.navigateBack('/places/tabs/discover');
         return;
       }
-      this.place = this.placesService.getPlace(paramMap.get('placeId'));
+      this.place = this.placesService.getPlaceById(paramMap.get('placeId'));
     });
   }
 
