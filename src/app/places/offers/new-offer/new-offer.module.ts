@@ -24,4 +24,4 @@ const routes: Routes = [
   ],
   declarations: [NewOfferPage]
 })
-export class NewOfferPageModule {}
+export class NewOfferPageModule { }

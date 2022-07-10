@@ -89,6 +89,9 @@ var CreateBookingComponent = /** @class */ (function () {
             endDate: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, { updateOn: 'change', validators: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required] })
         });
     };
+    /**
+     * Create a booking
+     */
     CreateBookingComponent.prototype.onCreateBooking = function () {
         if (!this.formBooking.valid) {
             return;

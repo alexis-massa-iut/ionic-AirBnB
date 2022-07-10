@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-tabs>\n  <ion-tab-bar slot=\"bottom\">\n    <ion-tab-button tab=\"discover\">\n      <ion-label>Découvrir</ion-label>\n      <ion-icon name=\"search\"></ion-icon>\n    </ion-tab-button>\n    <ion-tab-button tab=\"offers\">\n      <ion-label>Mes Offres</ion-label>\n      <ion-icon name=\"card\"></ion-icon>\n    </ion-tab-button>\n  </ion-tab-bar>\n</ion-tabs>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-tabs>\n  <ion-tab-bar slot=\"bottom\">\n    <ion-tab-button tab=\"discover\">\n      <ion-label>Découvrir</ion-label>\n      <ion-icon name=\"search\"></ion-icon>\n    </ion-tab-button>\n    <ion-tab-button tab=\"offers\">\n      <ion-label>Mes Offres</ion-label>\n      <ion-icon name=\"card\"></ion-icon>\n    </ion-tab-button>\n  </ion-tab-bar>\n</ion-tabs>");
 
 /***/ }),
 
@@ -40,12 +40,15 @@ var routes = [
         path: 'tabs',
         component: _places_page__WEBPACK_IMPORTED_MODULE_2__["PlacesPage"],
         children: [
-            { path: 'discover',
+            {
+                path: 'discover',
                 children: [
                     { path: '', loadChildren: function () { return Promise.all(/*! import() | discover-discover-module */[__webpack_require__.e("common"), __webpack_require__.e("discover-discover-module")]).then(__webpack_require__.bind(null, /*! ./discover/discover.module */ "./src/app/places/discover/discover.module.ts")).then(function (m) { return m.DiscoverPageModule; }); } },
                     { path: ':placeId', loadChildren: function () { return Promise.all(/*! import() | discover-place-detail-place-detail-module */[__webpack_require__.e("common"), __webpack_require__.e("discover-place-detail-place-detail-module")]).then(__webpack_require__.bind(null, /*! ./discover/place-detail/place-detail.module */ "./src/app/places/discover/place-detail/place-detail.module.ts")).then(function (m) { return m.PlaceDetailPageModule; }); } }
-                ] },
-            { path: 'offers',
+                ]
+            },
+            {
+                path: 'offers',
                 children: [
                     { path: '', loadChildren: function () { return Promise.all(/*! import() | offers-offers-module */[__webpack_require__.e("common"), __webpack_require__.e("offers-offers-module")]).then(__webpack_require__.bind(null, /*! ./offers/offers.module */ "./src/app/places/offers/offers.module.ts")).then(function (m) { return m.OffersPageModule; }); } },
                     { path: 'new', loadChildren: function () { return Promise.all(/*! import() | offers-new-offer-new-offer-module */[__webpack_require__.e("common"), __webpack_require__.e("offers-new-offer-new-offer-module")]).then(__webpack_require__.bind(null, /*! ./offers/new-offer/new-offer.module */ "./src/app/places/offers/new-offer/new-offer.module.ts")).then(function (m) { return m.NewOfferPageModule; }); } },
@@ -166,8 +169,7 @@ var __importDefault = (undefined && undefined.__importDefault) || function (mod)
 var PlacesPage = /** @class */ (function () {
     function PlacesPage() {
     }
-    PlacesPage.prototype.ngOnInit = function () {
-    };
+    PlacesPage.prototype.ngOnInit = function () { };
     PlacesPage = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-places',

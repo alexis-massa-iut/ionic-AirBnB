@@ -1,12 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { DiscoverPage } from './discover/discover.page';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-places',
   templateUrl: './places.page.html',
   styleUrls: ['./places.page.scss'],
 })
-export class PlacesPage implements OnInit, AfterViewInit {
+export class PlacesPage implements OnInit {
 
   constructor() { }
 

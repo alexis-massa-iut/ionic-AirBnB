@@ -95,8 +95,9 @@ var hostContext=function(r,t){return t.closest(r)!==null};var createColorClasses
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Place", function() { return Place; });
 var Place = /** @class */ (function () {
-    function Place(id, title, description, image, price) {
+    function Place(id, userId, title, description, image, price) {
         this.id = id;
+        this.userId = userId;
         this.title = title;
         this.description = description;
         this.image = image;
@@ -176,10 +177,8 @@ var BookingsService = /** @class */ (function () {
      * @param booking Booking to add
      */
     BookingsService.prototype.addBooking = function (booking) {
-        var id = (1).toString();
         do {
-            id = (Math.floor(Math.random() * 1000)).toString();
-            booking.id = id;
+            booking.id = (Math.floor(Math.random() * 1000)).toString();
         } while (this.getBookingById(booking.id));
         var bookings = this.getAllBookings();
         if (bookings)
@@ -328,16 +327,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var PlacesService = /** @class */ (function () {
-    /*
-    new Place(
-       'p1',
-       'Chalet Cartusien',
-       'The place to be.',
-       'https://a0.muscache.com/im/pictures/miso/Hosting-23976121/original/0832bc7e-8c9f-45a5-ba50-d82db5dbf2e9.jpeg?im_w=720',
-       219.99,
-       true
-    )
-     */
     function PlacesService(photoService, authService, toastController) {
         this.photoService = photoService;
         this.authService = authService;
@@ -371,33 +360,35 @@ var PlacesService = /** @class */ (function () {
      */
     PlacesService.prototype.getMyPlaces = function () {
         var _this = this;
-        return JSON.parse(localStorage.getItem('places')).filter(function (p) { return p.userId === _this.authService.userAuthenticated; });
+        var allPlaces = this.getAllPlaces();
+        return allPlaces ? allPlaces.filter(function (b) { return b.userId === _this.authService.userAuthenticated; }) : [];
     };
     /**
      * Add place
      * @param place Place to add
      */
     PlacesService.prototype.addPlace = function (place) {
-        var id = (1).toString();
+        if (this.getPlaceByTitle(place.title)) {
+            this.toastController.create({
+                message: 'Place with the same title already exists',
+                duration: 3000
+            }).then(function (toast) { return toast.present(); });
+            return;
+        }
         do {
-            id = (Math.floor(Math.random() * 1000)).toString();
-            place.id = id;
+            place.id = (Math.floor(Math.random() * 1000)).toString();
         } while (this.getPlaceById(place.id));
-        if (!this.getPlaceById(place.id) && !this.getPlaceByTitle(place.title)) { // If place doesn't exist already
-            var allPlaces = this.getAllPlaces();
+        // If place doesn't exist already
+        var allPlaces = this.getAllPlaces();
+        if (allPlaces)
             allPlaces.push(place);
-            localStorage.setItem('places', JSON.stringify(allPlaces));
-            this.toastController.create({
-                message: 'Place added',
-                duration: 2000
-            }).then(function (toast) { return toast.present(); });
-        }
-        else {
-            this.toastController.create({
-                message: 'Place already exists',
-                duration: 2000
-            }).then(function (toast) { return toast.present(); });
-        }
+        else
+            allPlaces = [place];
+        localStorage.setItem('places', JSON.stringify(allPlaces));
+        this.toastController.create({
+            message: 'Place created',
+            duration: 2000
+        }).then(function (toast) { return toast.present(); });
     };
     /**
      * Update place
@@ -424,7 +415,7 @@ var PlacesService = /** @class */ (function () {
     };
     /**
      * Delete place
-     * @param place Place of place to delete
+     * @param place Place to delete
      */
     PlacesService.prototype.deletePlace = function (place) {
         var places = this.getAllPlaces();

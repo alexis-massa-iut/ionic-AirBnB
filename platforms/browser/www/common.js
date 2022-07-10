@@ -177,10 +177,8 @@ var BookingsService = /** @class */ (function () {
      * @param booking Booking to add
      */
     BookingsService.prototype.addBooking = function (booking) {
-        var id = (1).toString();
         do {
-            id = (Math.floor(Math.random() * 1000)).toString();
-            booking.id = id;
+            booking.id = (Math.floor(Math.random() * 1000)).toString();
         } while (this.getBookingById(booking.id));
         var bookings = this.getAllBookings();
         if (bookings)
@@ -313,9 +311,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlacesService", function() { return PlacesService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm5/core.js");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/__ivy_ngcc__/fesm5/ionic-angular.js");
-/* harmony import */ var _model_place_model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../model/place.model */ "./src/app/model/place.model.ts");
-/* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../auth/auth.service */ "./src/app/services/auth/auth.service.ts");
-/* harmony import */ var _photo_photo_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../photo/photo.service */ "./src/app/services/photo/photo.service.ts");
+/* harmony import */ var _auth_auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../auth/auth.service */ "./src/app/services/auth/auth.service.ts");
+/* harmony import */ var _photo_photo_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../photo/photo.service */ "./src/app/services/photo/photo.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -329,18 +326,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var PlacesService = /** @class */ (function () {
-    /*
-    new Place(
-       'p1',
-       'Chalet Cartusien',
-       'The place to be.',
-       'https://a0.muscache.com/im/pictures/miso/Hosting-23976121/original/0832bc7e-8c9f-45a5-ba50-d82db5dbf2e9.jpeg?im_w=720',
-       219.99,
-       true
-    )
-     */
     function PlacesService(photoService, authService, toastController) {
         this.photoService = photoService;
         this.authService = authService;
@@ -351,8 +337,6 @@ var PlacesService = /** @class */ (function () {
      * @returns Place[]
      */
     PlacesService.prototype.getAllPlaces = function () {
-        var tmp = new _model_place_model__WEBPACK_IMPORTED_MODULE_2__["Place"]('p1', '87', 'Chalet Cartusien', 'The place to be.', 'https://a0.muscache.com/im/pictures/miso/Hosting-23976121/original/0832bc7e-8c9f-45a5-ba50-d82db5dbf2e9.jpeg?im_w=720', 219.99);
-        localStorage.setItem('places', JSON.stringify([tmp]));
         return JSON.parse(localStorage.getItem('places'));
     };
     /**
@@ -376,33 +360,35 @@ var PlacesService = /** @class */ (function () {
      */
     PlacesService.prototype.getMyPlaces = function () {
         var _this = this;
-        return JSON.parse(localStorage.getItem('places')).filter(function (p) { return p.userId === _this.authService.userAuthenticated; });
+        var allPlaces = this.getAllPlaces();
+        return allPlaces ? allPlaces.filter(function (b) { return b.userId === _this.authService.userAuthenticated; }) : [];
     };
     /**
      * Add place
      * @param place Place to add
      */
     PlacesService.prototype.addPlace = function (place) {
-        var id = (1).toString();
+        if (this.getPlaceByTitle(place.title)) {
+            this.toastController.create({
+                message: 'Place with the same title already exists',
+                duration: 3000
+            }).then(function (toast) { return toast.present(); });
+            return;
+        }
         do {
-            id = (Math.floor(Math.random() * 1000)).toString();
-            place.id = id;
+            place.id = (Math.floor(Math.random() * 1000)).toString();
         } while (this.getPlaceById(place.id));
-        if (!this.getPlaceById(place.id) && !this.getPlaceByTitle(place.title)) { // If place doesn't exist already
-            var allPlaces = this.getAllPlaces();
+        // If place doesn't exist already
+        var allPlaces = this.getAllPlaces();
+        if (allPlaces)
             allPlaces.push(place);
-            localStorage.setItem('places', JSON.stringify(allPlaces));
-            this.toastController.create({
-                message: 'Place added',
-                duration: 2000
-            }).then(function (toast) { return toast.present(); });
-        }
-        else {
-            this.toastController.create({
-                message: 'Place already exists',
-                duration: 2000
-            }).then(function (toast) { return toast.present(); });
-        }
+        else
+            allPlaces = [place];
+        localStorage.setItem('places', JSON.stringify(allPlaces));
+        this.toastController.create({
+            message: 'Place created',
+            duration: 2000
+        }).then(function (toast) { return toast.present(); });
     };
     /**
      * Update place
@@ -429,7 +415,7 @@ var PlacesService = /** @class */ (function () {
     };
     /**
      * Delete place
-     * @param place Place of place to delete
+     * @param place Place to delete
      */
     PlacesService.prototype.deletePlace = function (place) {
         var places = this.getAllPlaces();
@@ -443,16 +429,16 @@ var PlacesService = /** @class */ (function () {
         }
     };
     PlacesService.ctorParameters = function () { return [
-        { type: _photo_photo_service__WEBPACK_IMPORTED_MODULE_4__["PhotoService"] },
-        { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"] },
+        { type: _photo_photo_service__WEBPACK_IMPORTED_MODULE_3__["PhotoService"] },
+        { type: _auth_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"] },
         { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ToastController"] }
     ]; };
     PlacesService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [_photo_photo_service__WEBPACK_IMPORTED_MODULE_4__["PhotoService"],
-            _auth_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"],
+        __metadata("design:paramtypes", [_photo_photo_service__WEBPACK_IMPORTED_MODULE_3__["PhotoService"],
+            _auth_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"],
             _ionic_angular__WEBPACK_IMPORTED_MODULE_1__["ToastController"]])
     ], PlacesService);
     return PlacesService;

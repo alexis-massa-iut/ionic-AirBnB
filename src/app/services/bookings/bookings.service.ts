@@ -59,7 +59,7 @@ export class BookingsService {
     let bookings = this.getAllBookings();
     if (bookings) bookings.push(booking);
     else bookings = [booking];
-    
+
     localStorage.setItem('bookings', JSON.stringify(bookings));
     this.toastController.create({
       message: 'Booking created',

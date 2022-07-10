@@ -17,7 +17,7 @@ export class NewOfferPage implements OnInit {
 
   constructor(
     private photoService: PhotoService,
-    private placesServices: PlacesService,
+    private placesService: PlacesService,
     private authService: AuthService,
     private router: Router
   ) { }
@@ -42,9 +42,9 @@ export class NewOfferPage implements OnInit {
   }
 
   /**
- * Méthode pour upload une photo
- * @param source (string) : source de la photo
- */
+   * Méthode pour upload une photo
+   * @param source (string) : source de la photo
+   */
   onAddPicture(source: String) {
     if (source === 'camera') {
       this.photoService.takePicture().then(imageData => {
@@ -73,7 +73,7 @@ export class NewOfferPage implements OnInit {
       this.image,
       this.formOffer.value.price);
 
-    this.placesServices.addPlace(newPlace);
+    this.placesService.addPlace(newPlace);
 
     this.router.navigate(['/places/tabs/offers']);
   }

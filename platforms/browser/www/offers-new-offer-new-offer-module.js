@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button defaultHref=\"/places/tabs/offers\"></ion-back-button>\n    </ion-buttons>\n    <ion-title>New Offer</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <form [formGroup]=\"formOffer\">\n    <ion-grid>\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Titre (min 5, max 50)</ion-label>\n            <ion-input type=\"text\" autocomplete autocorrect formControlName=\"title\"></ion-input>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Description(min 5, max 255)</ion-label>\n            <ion-input type=\"text\" autocomplete autocorrect formControlName=\"description\"></ion-input>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Image</ion-label>\n            <ion-button color=\"primary\" (click)=\"onAddPicture('library')\" full>\n              <ion-icon name=\"image\" slot=\"icon-only\"></ion-icon>\n              Choisir dans la bibliothèque\n            </ion-button>\n\n            <ion-button color=\"primary\" (click)=\"onAddPicture('camera')\" full>\n              <ion-icon name=\"camera\" slot=\"icon-only\"></ion-icon>\n              Prendre une photo\n            </ion-button>\n\n            <ion-img [src]=\"image\"></ion-img>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Prix (00,00)</ion-label>\n            <ion-input type=\"string\" autocomplete autocorrect formControlName=\"price\" pattern=\"^[0-9]*,[0-9]{0,2}$\">\n            </ion-input>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n      <ion-row>\n        <ion-col size-sm=\"2\" offset-sm=\"5\">\n          <ion-button color=\"primary\" type=\"submit\" (click)=\"onCreateOffer()\">Submit\n          </ion-button>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </form>\n</ion-content>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-back-button defaultHref=\"/places/tabs/offers\"></ion-back-button>\n    </ion-buttons>\n    <ion-title>New Offer</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <form [formGroup]=\"formOffer\">\n    <ion-grid>\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Titre (min 5, max 50)</ion-label>\n            <ion-input type=\"text\" autocomplete autocorrect formControlName=\"title\"></ion-input>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Description(min 5, max 255)</ion-label>\n            <ion-input type=\"text\" autocomplete autocorrect formControlName=\"description\"></ion-input>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Image</ion-label>\n            <ion-button color=\"primary\" (click)=\"onAddPicture('library')\" full>\n              <ion-icon name=\"image\" slot=\"icon-only\"></ion-icon>\n              Choisir dans la bibliothèque\n            </ion-button>\n\n            <ion-button color=\"primary\" (click)=\"onAddPicture('camera')\" full>\n              <ion-icon name=\"camera\" slot=\"icon-only\"></ion-icon>\n              Prendre une photo\n            </ion-button>\n\n            <ion-img [src]=\"image\"></ion-img>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col size-sm=\"6\" offset-sm=\"4\">\n          <ion-item>\n            <ion-label position=\"floating\">Prix (00.00)</ion-label>\n            <ion-input type=\"number\" autocomplete autocorrect formControlName=\"price\" step=\".01\">\n            </ion-input>\n          </ion-item>\n        </ion-col>\n      </ion-row>\n      <ion-row>\n        <ion-col size-sm=\"2\" offset-sm=\"5\">\n          <ion-button color=\"primary\" type=\"submit\" (click)=\"onCreateOffer()\">Submit\n          </ion-button>\n        </ion-col>\n      </ion-row>\n    </ion-grid>\n  </form>\n</ion-content>");
 
 /***/ }),
 
@@ -119,9 +119,9 @@ var __importDefault = (undefined && undefined.__importDefault) || function (mod)
 
 
 var NewOfferPage = /** @class */ (function () {
-    function NewOfferPage(photoService, placesServices, authService, router) {
+    function NewOfferPage(photoService, placesService, authService, router) {
         this.photoService = photoService;
-        this.placesServices = placesServices;
+        this.placesService = placesService;
         this.authService = authService;
         this.router = router;
         this.image = 'https://www.unfe.org/wp-content/uploads/2019/04/SM-placeholder.png'; // Default image
@@ -144,9 +144,9 @@ var NewOfferPage = /** @class */ (function () {
         });
     };
     /**
-   * Méthode pour upload une photo
-   * @param source (string) : source de la photo
-   */
+     * Méthode pour upload une photo
+     * @param source (string) : source de la photo
+     */
     NewOfferPage.prototype.onAddPicture = function (source) {
         var _this = this;
         if (source === 'camera') {
@@ -169,9 +169,8 @@ var NewOfferPage = /** @class */ (function () {
         if (!this.formOffer.valid) {
             return;
         }
-        var newPlace = new src_app_model_place_model__WEBPACK_IMPORTED_MODULE_3__["Place"]('', this.authService.userAuthenticated, this.formOffer.value.title, this.formOffer.value.description, this.image, this.formOffer.value.price);
-        this.placesServices.addPlace(newPlace);
-        this.formOffer.reset();
+        var newPlace = new src_app_model_place_model__WEBPACK_IMPORTED_MODULE_3__["Place"]('0', this.authService.userAuthenticated, this.formOffer.value.title, this.formOffer.value.description, this.image, this.formOffer.value.price);
+        this.placesService.addPlace(newPlace);
         this.router.navigate(['/places/tabs/offers']);
     };
     NewOfferPage.ctorParameters = function () { return [

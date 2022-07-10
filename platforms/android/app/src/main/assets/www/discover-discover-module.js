@@ -9,7 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button></ion-menu-button>\n      <!-- <ion-button (click)=\"onOpenMenu()\">\n        Open\n      </ion-button> -->\n    </ion-buttons>\n    <ion-title>Endroits à Découvrir</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <ion-grid>\n    <ion-row>\n      <ion-col size=\"12\" size-sm=\"8\" offset-sm=\"2\" class=\"ion-text-center\">\n        <ion-card>\n          <ion-card-header>\n            <ion-card-title>{{ loadedPlaces[0].title }}</ion-card-title>\n            <ion-card-subtitle>{{ loadedPlaces[0].price | currency:'EUR':'symbol':'3.2-2':'fr' }} / Nuit\n            </ion-card-subtitle>\n          </ion-card-header>\n          <ion-img [src]=\"loadedPlaces[0].image\"></ion-img>\n          <ion-card-content>\n            <p>{{ loadedPlaces[0].description }}</p>\n          </ion-card-content>\n          <div>\n            <ion-button fill=\"clear\" color=\"primary\" [routerLink]=\"['/','places','tabs','discover',loadedPlaces[0].id]\">\n              Voir</ion-button>\n          </div>\n        </ion-card>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col size=\"12\" size-sm=\"8\" offset-sm=\"2\" class=\"ion-text-center\">\n        <ion-list>\n          <ion-item *ngFor=\"let place of loadedPlaces.slice(1)\"\n            [routerLink]=\"['/', 'places', 'tabs', 'discover', place.id]\" detail>\n            <ion-thumbnail slot=\"start\">\n              <ion-img [src]=\"place.imageUrl\"></ion-img>\n            </ion-thumbnail>\n            <ion-label>\n              <h2>{{ place.title }}</h2>\n              <p>{{ place.description }}</p>\n            </ion-label>\n          </ion-item>\n        </ion-list>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n</ion-content>");
+/* harmony default export */ __webpack_exports__["default"] = ("<ion-header>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button></ion-menu-button>\n      <!-- <ion-button (click)=\"onOpenMenu()\">\n        Open\n      </ion-button> -->\n    </ion-buttons>\n    <ion-title>Endroits à Découvrir</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content class=\"ion-padding\">\n  <ion-button (click)=\"onUpdateList()\" title=\"Refresh list\">\n    <ion-icon name=\"refresh-outline\"></ion-icon>\n  </ion-button>\n  <ion-label>Refresh offer list (Voir methode onUpdateList() de discover.page.ts)</ion-label>\n\n  <ion-grid *ngIf=\"loadedPlaces.length != 0\">\n    <ion-row>\n      <ion-col size=\"12\" size-sm=\"8\" offset-sm=\"2\" class=\"ion-text-center\">\n        <ion-card>\n          <ion-card-header>\n            <ion-card-title>{{ loadedPlaces[0].title }}</ion-card-title>\n            <ion-card-subtitle>{{ loadedPlaces[0].price | currency:'EUR':'symbol':'3.2-2':'fr' }} / Nuit\n            </ion-card-subtitle>\n          </ion-card-header>\n          <ion-img [src]=\"loadedPlaces[0].image\"></ion-img>\n          <ion-card-content>\n            <p>{{ loadedPlaces[0].description }}</p>\n          </ion-card-content>\n          <div>\n            <ion-button fill=\"clear\" color=\"primary\" [routerLink]=\"['/','places','tabs','discover',loadedPlaces[0].id]\">\n              Voir</ion-button>\n          </div>\n        </ion-card>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col size=\"12\" size-sm=\"8\" offset-sm=\"2\" class=\"ion-text-center\">\n        <ion-list>\n          <ion-item *ngFor=\"let place of loadedPlaces.slice(1)\"\n            [routerLink]=\"['/', 'places', 'tabs', 'discover', place.id]\" detail>\n            <ion-thumbnail slot=\"start\">\n              <ion-img [src]=\"place.image\"></ion-img>\n            </ion-thumbnail>\n            <ion-label>\n              <h2>{{ place.title }}</h2>\n              <p>{{ place.description }}</p>\n              <p>{{ place.price | currency:'EUR':'symbol':'3.2-2':'fr' }} / Nuit </p>\n            </ion-label>\n          </ion-item>\n        </ion-list>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n</ion-content>");
 
 /***/ }),
 
@@ -115,6 +115,17 @@ var DiscoverPage = /** @class */ (function () {
         this.menuCtrl = menuCtrl;
     }
     DiscoverPage.prototype.ngOnInit = function () {
+        this.loadedPlaces = this.placesService.getAllPlaces();
+    };
+    /**
+     * Update offer list
+     * @description This comes as a last resort to fix the issue of the list not updating
+     * when coming back to the /discover tab after a new offer is added.
+     * I think we can update the list by using the ViewChild directive in the places.page.ts
+     * to trigger an updateData() method in the discover.page.ts when tabs are switched.
+     * But I can't seem to use ViewChild on a Page element, but only on a Component/Template/Directive.
+     */
+    DiscoverPage.prototype.onUpdateList = function () {
         this.loadedPlaces = this.placesService.getAllPlaces();
     };
     DiscoverPage.ctorParameters = function () { return [
